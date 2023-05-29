@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:babybear/State/stateProvider.dart';
 import 'package:babybear/State/state.dart';
+import 'package:babybear/State/alert.dart';
 
 class StatePage extends StatelessWidget {
   final AppState _babystate = AppState();
@@ -9,8 +10,6 @@ class StatePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     StateProvider stateProvider = Provider.of<StateProvider>(context);
-
-    int currentState = stateProvider.currentStatus;
 
     return Scaffold(
       appBar: AppBar(
@@ -21,9 +20,14 @@ class StatePage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              '지금 아기 상태는? : $currentState',
-              style: TextStyle(fontSize: 20),
+            Consumer<StateProvider>(
+              builder: (context, stateProvider, _) {
+                int currentState = stateProvider.currentStatus;
+                return Text(
+                  '지금 아기 상태는? : $currentState',
+                  style: TextStyle(fontSize: 20),
+                );
+              },
             ),
             SizedBox(height: 20),
             TextButton(
@@ -86,11 +90,30 @@ class StatePage extends StatelessWidget {
       ),
     );
   }
+
   void sendStatusToArduino(int status) async {
     try {
       await _babystate.changeLEDStatus(status);
+      showNotification(status);
     } catch (e) {
       print(e.toString());
+    }
+  }
+
+  void showNotification(int status) {
+    String title = '';
+    String body = '';
+
+    if (status == 1) {
+      title = '상태가 1입니다';
+      body = '진동이 계속됩니다';
+    } else if (status >= 2 && status <= 4) {
+      title = '상태가 $status입니다';
+      body = '백그라운드 알림이 표시됩니다';
+    }
+
+    if (title.isNotEmpty && body.isNotEmpty) {
+      AlertManager.showBackgroundNotification(title, body);
     }
   }
 }
