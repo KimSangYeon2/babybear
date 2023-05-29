@@ -8,7 +8,7 @@ class BSlider extends StatefulWidget {
 
 class _BSliderState extends State<BSlider> {
   double _brightnessValue = 0;
-  final StateService _stateService = StateService();
+  final AppState _appstate = AppState();
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class _BSliderState extends State<BSlider> {
           setState(() {
             _brightnessValue = value;
           });
-          setBrightness(value.toInt()); // 슬라이더 값을 아두이노로 전송
+          setBrightness(value.toInt());
         },
       ),
     );
@@ -30,7 +30,7 @@ class _BSliderState extends State<BSlider> {
 
   void setBrightness(int brightness) async {
     try {
-      await _stateService.setBrightness(brightness);
+      await _appstate.setBrightness(brightness);
     } catch (e) {
       print(e.toString());
     }

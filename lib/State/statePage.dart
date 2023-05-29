@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:babybear/State/stateProvider.dart';
-import 'package:babybear/State/state.dart'; // StateService import 추가
+import 'package:babybear/State/state.dart';
 
 class StatePage extends StatelessWidget {
-  final StateService _stateService = StateService(); // StateService 인스턴스 생성
+  final AppState _babystate = AppState();
 
   @override
   Widget build(BuildContext context) {
     StateProvider stateProvider = Provider.of<StateProvider>(context);
 
-    int currentStatus = stateProvider.currentStatus;
+    int currentState = stateProvider.currentStatus;
 
     return Scaffold(
       appBar: AppBar(
@@ -22,7 +22,7 @@ class StatePage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '지금 아기 상태는? : $currentStatus',
+              '지금 아기 상태는? : $currentState',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),
@@ -88,7 +88,7 @@ class StatePage extends StatelessWidget {
   }
   void sendStatusToArduino(int status) async {
     try {
-      await _stateService.changeLEDStatus(status);
+      await _babystate.changeLEDStatus(status);
     } catch (e) {
       print(e.toString());
     }

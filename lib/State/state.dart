@@ -1,7 +1,7 @@
 import 'package:http/http.dart' as http;
 
-class StateService {
-  final String _baseUrl = 'http://172.30.1.80'; // 아두이노의 IP 주소
+class AppState {
+  final String _baseUrl = 'http://172.30.1.80';
 
   Future<String> changeLEDStatus(int status) async {
     try {
