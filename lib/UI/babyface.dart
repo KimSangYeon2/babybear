@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:babybear/State/stateProvider.dart';
 
 class BabyFace extends StatelessWidget {
-  final int babyfaceState;
-
-  BabyFace({required this.babyfaceState});
-
   @override
   Widget build(BuildContext context) {
+    StateProvider stateProvider = Provider.of<StateProvider>(context);
+
+    int babyfaceState = stateProvider.currentStatus;
+
     IconData icon;
     String text;
     Color iconColor;
@@ -39,8 +41,8 @@ class BabyFace extends StatelessWidget {
         break;
       default:
         icon = Icons.child_care;
-        text = '';
-        iconColor = Colors.black;
+        text = 'Off';
+        iconColor = Colors.grey;
     }
 
     return Column(

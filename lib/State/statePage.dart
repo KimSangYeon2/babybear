@@ -1,51 +1,35 @@
 import 'package:flutter/material.dart';
-import 'state.dart';
+import 'package:provider/provider.dart';
+import 'package:babybear/State/stateProvider.dart';
+import 'package:babybear/State/state.dart'; // StateService import 추가
 
-class StatePage extends StatefulWidget {
-  StatePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  _StatePageState createState() => _StatePageState();
-}
-
-class _StatePageState extends State<StatePage> {
-  int _currentStatus = 0;
-  final StateService _stateService = StateService();
-
-  Future<void> _changeLEDStatus(int status) async {
-    try {
-      final result = await _stateService.changeLEDStatus(status);
-      setState(() {
-        _currentStatus = int.parse(result);
-      });
-    } catch (e) {
-      print(e.toString());
-    }
-  }
+class StatePage extends StatelessWidget {
+  final StateService _stateService = StateService(); // StateService 인스턴스 생성
 
   @override
   Widget build(BuildContext context) {
+    StateProvider stateProvider = Provider.of<StateProvider>(context);
+
+    int currentStatus = stateProvider.currentStatus;
+
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text('BabyBear'),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              '지금 아기 상태는? : $_currentStatus',
+              '지금 아기 상태는? : $currentStatus',
               style: TextStyle(fontSize: 20),
             ),
             SizedBox(height: 20),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _currentStatus = 1;
-                });
-                _changeLEDStatus(1);
+                stateProvider.changeStatus(1);
+                sendStatusToArduino(1);
               },
               child: Text('울음'),
               style: ButtonStyle(
@@ -55,10 +39,8 @@ class _StatePageState extends State<StatePage> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _currentStatus = 2;
-                });
-                _changeLEDStatus(2);
+                stateProvider.changeStatus(2);
+                sendStatusToArduino(2);
               },
               child: Text('조용함'),
               style: ButtonStyle(
@@ -68,10 +50,8 @@ class _StatePageState extends State<StatePage> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _currentStatus = 3;
-                });
-                _changeLEDStatus(3);
+                stateProvider.changeStatus(3);
+                sendStatusToArduino(3);
               },
               child: Text('시끄러움'),
               style: ButtonStyle(
@@ -81,10 +61,8 @@ class _StatePageState extends State<StatePage> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _currentStatus = 4;
-                });
-                _changeLEDStatus(4);
+                stateProvider.changeStatus(4);
+                sendStatusToArduino(4);
               },
               child: Text('웃음'),
               style: ButtonStyle(
@@ -94,10 +72,8 @@ class _StatePageState extends State<StatePage> {
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  _currentStatus = 5;
-                });
-                _changeLEDStatus(5);
+                stateProvider.changeStatus(5);
+                sendStatusToArduino(5);
               },
               child: Text('종료'),
               style: ButtonStyle(
@@ -109,5 +85,12 @@ class _StatePageState extends State<StatePage> {
         ),
       ),
     );
+  }
+  void sendStatusToArduino(int status) async {
+    try {
+      await _stateService.changeLEDStatus(status);
+    } catch (e) {
+      print(e.toString());
+    }
   }
 }

@@ -1,12 +1,19 @@
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:babybear/State/statePage.dart';
+import 'package:babybear/State/stateProvider.dart';
 import 'package:babybear/ui/babyface.dart';
 import 'package:babybear/ui/playsound.dart';
 import 'package:babybear/ui/playvoice.dart';
-import 'package:babybear/State/statePage.dart';
 import 'package:babybear/State/bSlider.dart';
-import 'package:flutter/material.dart';
 
 void main() {
-  runApp(BabyBearApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => StateProvider(),
+      child: BabyBearApp(),
+    ),
+  );
 }
 
 class BabyBearApp extends StatelessWidget {
@@ -35,7 +42,7 @@ class MainPage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => StatePage(title: '',)),
+                MaterialPageRoute(builder: (context) => StatePage()),
               );
             },
           ),
@@ -45,6 +52,7 @@ class MainPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            BabyFace(),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -63,7 +71,7 @@ class MainPage extends StatelessWidget {
               },
               child: Text('아기를 위한 소리'),
             ),
-            BSlider(), // 새로 추가된 BSlider 위젯
+            BSlider(),
           ],
         ),
       ),
